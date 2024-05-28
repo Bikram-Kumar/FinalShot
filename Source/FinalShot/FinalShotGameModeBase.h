@@ -14,4 +14,6 @@ class FINALSHOT_API AFinalShotGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+	virtual void StartPlay() override;
+	
 };
