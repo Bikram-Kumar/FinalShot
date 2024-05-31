@@ -8,6 +8,12 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 
+
+
+#include "Grenade.h"
+
+
+
 #include "PlayerCharacter.generated.h"
 
 
@@ -21,9 +27,24 @@ public:
 	// Sets default values for this character's properties
 	APlayerCharacter();
 
+
+
+
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	TSubclassOf<class AGrenade> GrenadeClass;
+
+
+
+
+
+
 
 public:	
 
@@ -52,6 +73,12 @@ public:
 
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
 	USkeletalMeshComponent* HandMesh;
+
+	UFUNCTION() 
+	void Shoot();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+	FVector MuzzleOffset;
 
 
 };

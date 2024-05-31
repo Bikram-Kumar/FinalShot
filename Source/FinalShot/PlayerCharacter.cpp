@@ -45,7 +45,7 @@ void APlayerCharacter::BeginPlay()
 
 	check(GEngine != nullptr);
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Character is working"));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Character is live"));
 	
 }
 
@@ -72,6 +72,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
 
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &APlayerCharacter::Shoot);
 
 
 }
@@ -115,3 +116,40 @@ void APlayerCharacter::StopJump () {
 }
 
 
+void APlayerCharacter::Shoot () {
+
+	if (GrenadeClass) {
+
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		MuzzleOffset.Set(100.0f, 0.0f, 0.0f);
+
+		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+
+		FRotator MuzzleRotation = CameraRotation;
+		MuzzleRotation.Pitch += 10.0f;
+
+		UWorld* World = GetWorld();
+
+		if (World) {
+
+			FActorSpawnParameters SpawnParams;
+
+			SpawnParams.Owner = this;
+			SpawnParams.Instigator = GetInstigator();
+
+			AGrenade* Grenade = World->SpawnActor<AGrenade>(GrenadeClass, MuzzleLocation, MuzzleRotation, SpawnParams);
+			if (Grenade) {
+				FVector ShootDirection = MuzzleRotation.Vector();
+        		Grenade->ShootInDirection(ShootDirection);
+			}
+   
+
+		}
+
+
+	}
+	
+}
