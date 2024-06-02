@@ -21,7 +21,7 @@ AGrenade::AGrenade()
 
 		CollisionComponent->BodyInstance.SetCollisionProfileName(TEXT("Projectile"));
 		CollisionComponent->OnComponentHit.AddDynamic(this, &AGrenade::OnHit);
-		CollisionComponent->InitSphereRadius(15.0f);
+		CollisionComponent->InitSphereRadius(SphereRadius);
 
 		RootComponent = CollisionComponent;
 

@@ -33,6 +33,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
+	UPROPERTY(EditDefaultsOnly)
+	float SphereRadius = 15.0f;
+
+
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	USphereComponent* CollisionComponent;
 
