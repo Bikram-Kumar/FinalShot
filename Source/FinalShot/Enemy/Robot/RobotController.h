@@ -4,17 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "URobotController.generated.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
+
+#include "RobotController.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class FINALSHOT_API UURobotController : public UActorComponent
+class FINALSHOT_API URobotController : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UURobotController();
+	URobotController();
 
 protected:
 	// Called when the game starts
@@ -26,4 +29,8 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	float Health = 100.0f;
+
+	UFUNCTION(BlueprintCallable)
+	void UpdateWalkSpeed(float NewWalkSpeed);
+
 };
