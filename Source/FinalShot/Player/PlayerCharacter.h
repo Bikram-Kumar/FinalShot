@@ -10,7 +10,7 @@
 
 
 
-#include "Grenade.h"
+#include "../Grenade.h"
 
 
 
@@ -55,18 +55,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 
-	UFUNCTION()
-	void MoveForward(float Value);
-
-
-	UFUNCTION()
-	void MoveRight(float Value);
-
-	UFUNCTION()
-	void StartJump();
-
-	UFUNCTION()
-	void StopJump();
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* MainCameraComponent;

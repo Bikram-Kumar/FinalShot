@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+
+#include "../DataAssets/GunDataAsset.h"
+
 #include "FinalShotGameModeBase.generated.h"
 
 /**
@@ -13,7 +16,11 @@ UCLASS()
 class FINALSHOT_API AFinalShotGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
-	virtual void StartPlay() override;
+	protected:
+		virtual void StartPlay() override;
+
+	public:
+		UPROPERTY(EditAnywhere)
+		UGunDataAsset* GunDataAsset;
 	
 };

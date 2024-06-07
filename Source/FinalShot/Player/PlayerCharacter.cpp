@@ -3,6 +3,9 @@
 
 #include "PlayerCharacter.h"
 
+#include "PlayerControlsManager.h"
+
+
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
@@ -61,59 +64,26 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	UPlayerControlsManager* man = FindComponentByClass<UPlayerControlsManager>();
 
-	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
+
+	PlayerInputComponent->BindAxis("MoveForward", man, &UPlayerControlsManager::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", man, &UPlayerControlsManager::MoveRight);
 
 	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APlayerCharacter::StartJump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APlayerCharacter::StopJump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, man, &UPlayerControlsManager::StartJump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, man, &UPlayerControlsManager::StopJump);
 
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &APlayerCharacter::Shoot);
-
-
-}
-
-
-
-void APlayerCharacter::MoveForward (float Value) {
-
-	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	AddMovementInput(Direction, Value);
-
-}
-
-
-
-
-
-
-void APlayerCharacter::MoveRight (float Value) {
-
-	FVector Direction = FRotationMatrix(Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-	AddMovementInput(Direction, Value);
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, man, &UPlayerControlsManager::Shoot);
 
 
 }
 
 
 
-
-void APlayerCharacter::StartJump () {
-
-	bPressedJump = true;
-	
-}
-
-
-void APlayerCharacter::StopJump () {
-
-	bPressedJump = false;
-	
-}
 
 
 void APlayerCharacter::Shoot () {
