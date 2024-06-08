@@ -4,17 +4,39 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "PlayerManager.generated.h"
+
+
+#include "Player/PlayerCharacter.h"
+#include "DataAssets/GunDataAsset.h"
+
+
+#include "GameManager.generated.h"
+
+USTRUCT()
+struct FReferences {
+	GENERATED_BODY()
+
+	UPROPERTY()
+	UWorld* World;
+
+	UPROPERTY(EditAnywhere)
+	APlayerCharacter* Player;
+
+	UPROPERTY(EditAnywhere)
+	UGunDataAsset* GunDataAsset;
+};
+
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class FINALSHOT_API UPlayerManager : public UActorComponent
+class FINALSHOT_API UGameManager : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UPlayerManager();
+	UGameManager();
 
 protected:
 	// Called when the game starts
@@ -24,5 +46,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UPROPERTY(EditAnywhere)
+	FReferences References;
+
 };

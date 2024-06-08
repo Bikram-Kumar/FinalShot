@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
 
-#include "../DataAssets/GunDataAsset.h"
 
 #include "FinalShotGameModeBase.generated.h"
 
@@ -20,7 +19,6 @@ class FINALSHOT_API AFinalShotGameModeBase : public AGameModeBase
 		virtual void StartPlay() override;
 
 	public:
-		UPROPERTY(EditAnywhere)
-		UGunDataAsset* GunDataAsset;
+		//
 	
 };
