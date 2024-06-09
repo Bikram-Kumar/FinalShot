@@ -19,9 +19,7 @@ void UPlayerManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GameManager = FindObject<AActor>(GetOwner()->GetWorld()->GetCurrentLevel(), TEXT("GameManager"))->FindComponentByClass<UGameManager>();
-
-	UE_LOG(LogTemp, Warning, TEXT("Damage of AR4: %d"), GameManager->References.GunDataAsset->Guns[FName(TEXT("AR4"))].Damage);
+	UE_LOG(LogTemp, Warning, TEXT("Damage of AR4: %d"), GM->GunDataAsset->Guns[FName(TEXT("AR4"))].Damage);
 	
 }
 

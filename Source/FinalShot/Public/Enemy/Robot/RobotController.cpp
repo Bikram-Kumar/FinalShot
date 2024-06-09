@@ -19,8 +19,6 @@ void URobotController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(LogTemp, Warning, TEXT("Hello %lf"), Health)
-
 	// ...
 	
 }

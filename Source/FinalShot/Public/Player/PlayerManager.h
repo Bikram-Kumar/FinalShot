@@ -28,6 +28,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	
 
-	UPROPERTY()
-	UGameManager* GameManager;
+	UPROPERTY(EditAnywhere)
+	AGameManager* GM;
+
+	UPROPERTY(EditAnywhere)
+	FName EquippedGun = FName(TEXT("AR4"));
+
 };

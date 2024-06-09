@@ -19,8 +19,6 @@ UPlayerControlsManager::UPlayerControlsManager()
 void UPlayerControlsManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Player = Cast<ACharacter>(GetOwner());
 	
 }
 
@@ -38,8 +36,8 @@ void UPlayerControlsManager::TickComponent(float DeltaTime, ELevelTick TickType,
 
 void UPlayerControlsManager::MoveForward (float Value) {
 
-	FVector Direction = FRotationMatrix(Player->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
-	Player->AddMovementInput(Direction, Value);
+	FVector Direction = FRotationMatrix(GM->Player->Controller->GetControlRotation()).GetScaledAxis(EAxis::X);
+	GM->Player->AddMovementInput(Direction, Value);
 
 }
 
@@ -47,8 +45,8 @@ void UPlayerControlsManager::MoveForward (float Value) {
 
 void UPlayerControlsManager::MoveRight (float Value) {
 
-	FVector Direction = FRotationMatrix(Player->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
-	Player->AddMovementInput(Direction, Value);
+	FVector Direction = FRotationMatrix(GM->Player->Controller->GetControlRotation()).GetScaledAxis(EAxis::Y);
+	GM->Player->AddMovementInput(Direction, Value);
 
 
 }
@@ -58,14 +56,14 @@ void UPlayerControlsManager::MoveRight (float Value) {
 
 void UPlayerControlsManager::StartJump () {
 
-	Player->bPressedJump = true;
+	GM->Player->bPressedJump = true;
 	
 }
 
 
 void UPlayerControlsManager::StopJump () {
 
-	Player->bPressedJump = false;
+	GM->Player->bPressedJump = false;
 	
 }
 
@@ -74,17 +72,30 @@ void UPlayerControlsManager::StopJump () {
 void UPlayerControlsManager::Shoot () {
 
 	FHitResult Hit;
-	FVector TraceStart = Player->GetActorLocation();
-	FVector TraceEnd = TraceStart + (Player->GetActorForwardVector() * 1000.0f);
+	FVector Forward = GM->Player->GetControlRotation().Vector();
+	
+	FVector TraceStart = GM->Player->GetActorLocation() + (FVector::UpVector * HandsHeight) + (Forward * GunMuzzleDistance);
+	FVector TraceEnd = TraceStart + (Forward * BulletRange);
 
 	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(Player);
+	QueryParams.AddIgnoredActor(GM->Player);
 
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Pawn, QueryParams);
 
-	DrawDebugLine(Player->GetWorld(), TraceStart, TraceEnd, FColor::Blue, false, 5.0f, 0, 10.0f);
+	DrawDebugLine(GM->World, TraceStart, TraceEnd, FColor::Blue, false, 5.0f, 0, 10.0f);
 
-	if (Hit.bBlockingHit && IsValid(Hit.GetActor())) {
-		UE_LOG(LogTemp, Warning, TEXT("Hit"));
+	AActor* Actor = Hit.GetActor();
+
+	if (Hit.bBlockingHit && IsValid(Actor)) {
+		if (Actor->ActorHasTag(FName(TEXT("Enemy")))) {
+
+			FName EquippedGun = GM->Player->FindComponentByClass<UPlayerManager>()->EquippedGun;
+
+			int DamageAmount = GM->GunDataAsset->Guns[EquippedGun].Damage;
+			
+			Actor->FindComponentByClass<UEnemyManager>()->ApplyDamage(DamageAmount);
+
+			UE_LOG(LogTemp, Warning, TEXT("Enemy Health: %d"), Actor->FindComponentByClass<UEnemyManager>()->GetHealth());
+		}
 	}
 }

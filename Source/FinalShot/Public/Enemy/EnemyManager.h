@@ -16,13 +16,29 @@ public:
 	// Sets default values for this component's properties
 	UEnemyManager();
 
+
 protected:
-	// Called when the game starts
+	
+	UPROPERTY()
+	int Health = 100;
+
 	virtual void BeginPlay() override;
 
+
 public:	
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UFUNCTION()
+	int GetHealth();
+
+	UFUNCTION()
+	void ApplyDamage(int Amount);
+
+
+
 };

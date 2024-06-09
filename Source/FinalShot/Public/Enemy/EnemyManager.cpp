@@ -32,3 +32,31 @@ void UEnemyManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
+
+void UEnemyManager::EndPlay(const EEndPlayReason::Type EndPlayReason) {
+
+	if (EndPlayReason == EEndPlayReason::Destroyed) {
+
+		UE_LOG(LogTemp, Warning, TEXT("I am getting destroyed... AAAH"));
+
+	}
+
+	Super::EndPlay(EndPlayReason);
+
+}
+
+
+
+int UEnemyManager::GetHealth() {
+	return Health;
+}
+
+
+void UEnemyManager::ApplyDamage(int Amount) {
+	Health -= Amount;
+
+	if (Health <= 0) {
+		GetOwner()->Destroy();
+	}
+
+}
