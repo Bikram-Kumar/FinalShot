@@ -4,8 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
 #include "GameFramework/Actor.h"
+#include "Camera/CameraComponent.h"
+#include "TimerManager.h"
+#include "Kismet/GameplayStatics.h"
+#include "Math/UnrealMathUtility.h"
+
 
 #include "Player/PlayerCharacter.h"
 #include "Player/PlayerManager.h"
@@ -59,8 +64,22 @@ public:
 	UFUNCTION()
 	void StopJump();
 
+	UPROPERTY()
+	FTimerHandle ShootingTimerHandle;
+
+	UFUNCTION()
+	void ShootStart();
+
+	UFUNCTION()
+	void ShootEnd();
+
 	UFUNCTION()
 	void Shoot();
+	
+	UFUNCTION()
+	void PlayBulletSound();
+
+
 	
 
 

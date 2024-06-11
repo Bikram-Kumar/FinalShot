@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Camera/CameraComponent.h"
+#include "TimerManager.h"
 
 #include "Player/PlayerCharacter.h"
 #include "DataAssets/GunDataAsset.h"
@@ -11,6 +13,9 @@
 
 #include "GameManager.generated.h"
 
+
+
+class UPlayerManager;
 
 
 
@@ -36,10 +41,17 @@ public:
 	UWorld* World;
 
 	UPROPERTY(EditAnywhere)
-	APlayerCharacter* Player;
+	ACharacter* Player;
+
+	UPROPERTY()
+	UPlayerManager* PlayerManager;
+
+	UPROPERTY()
+	UCameraComponent* PlayerCamera;
 
 	UPROPERTY(EditAnywhere)
 	UGunDataAsset* GunDataAsset;
 	
+
 
 };

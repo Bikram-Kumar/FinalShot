@@ -64,20 +64,21 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	UPlayerControlsManager* man = FindComponentByClass<UPlayerControlsManager>();
+	UPlayerControlsManager* ControlMan = FindComponentByClass<UPlayerControlsManager>();
 
 
-	PlayerInputComponent->BindAxis("MoveForward", man, &UPlayerControlsManager::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", man, &UPlayerControlsManager::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", ControlMan, &UPlayerControlsManager::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", ControlMan, &UPlayerControlsManager::MoveRight);
 
 	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::AddControllerPitchInput);
 
 
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, man, &UPlayerControlsManager::StartJump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, man, &UPlayerControlsManager::StopJump);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, ControlMan, &UPlayerControlsManager::StartJump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, ControlMan, &UPlayerControlsManager::StopJump);
 
-	PlayerInputComponent->BindAction("Shoot", IE_Pressed, man, &UPlayerControlsManager::Shoot);
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, ControlMan, &UPlayerControlsManager::ShootStart);
+	PlayerInputComponent->BindAction("Shoot", IE_Released, ControlMan, &UPlayerControlsManager::ShootEnd);
 
 
 }

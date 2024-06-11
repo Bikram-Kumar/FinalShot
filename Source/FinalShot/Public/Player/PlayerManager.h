@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-
+#include "Components/AudioComponent.h"
 #include "Game/GameManager.h"
 
+
 #include "PlayerManager.generated.h"
+
+
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -32,6 +36,11 @@ public:
 	AGameManager* GM;
 
 	UPROPERTY(EditAnywhere)
-	FName EquippedGun = FName(TEXT("AR4"));
+	FName EquippedGunName = FName(TEXT("AR4"));
+
+
+	UFUNCTION()
+	FGunData& GetEquippedGunData();
+
 
 };

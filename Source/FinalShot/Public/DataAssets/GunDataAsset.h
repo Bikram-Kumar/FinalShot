@@ -18,8 +18,23 @@ struct FGunData {
     UPROPERTY(EditAnywhere)
     int Damage;
 
+    // In Degrees
     UPROPERTY(EditAnywhere)
-    int Recoil;
+    float HorizontalRecoil;
+
+    // In Degrees
+    UPROPERTY(EditAnywhere)
+    float VerticalRecoil;
+
+    // Per Minute
+    UPROPERTY(EditAnywhere)
+    int FireRate; 
+
+    UPROPERTY(EditAnywhere)
+    float TriggerReleaseTime; 
+
+    UPROPERTY(EditAnywhere)
+    USoundBase* BulletSound; 
 
 
 };

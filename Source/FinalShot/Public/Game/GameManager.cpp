@@ -2,6 +2,7 @@
 
 
 #include "GameManager.h"
+#include "Player/PlayerManager.h"
 
 
 AGameManager::AGameManager()
@@ -17,6 +18,8 @@ void AGameManager::BeginPlay()
 	Super::BeginPlay();
 
 	World = GetWorld();
+	PlayerCamera = Player->FindComponentByClass<UCameraComponent>();
+	PlayerManager = Player->FindComponentByClass<UPlayerManager>();
 	
 }
 

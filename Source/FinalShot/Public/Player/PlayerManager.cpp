@@ -3,6 +3,7 @@
 
 #include "PlayerManager.h"
 
+
 // Sets default values for this component's properties
 UPlayerManager::UPlayerManager()
 {
@@ -18,8 +19,6 @@ UPlayerManager::UPlayerManager()
 void UPlayerManager::BeginPlay()
 {
 	Super::BeginPlay();
-
-	UE_LOG(LogTemp, Warning, TEXT("Damage of AR4: %d"), GM->GunDataAsset->Guns[FName(TEXT("AR4"))].Damage);
 	
 }
 
@@ -30,5 +29,12 @@ void UPlayerManager::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+}
+
+
+
+FGunData& UPlayerManager::GetEquippedGunData()
+{
+	return GM->GunDataAsset->Guns[EquippedGunName];
 }
 

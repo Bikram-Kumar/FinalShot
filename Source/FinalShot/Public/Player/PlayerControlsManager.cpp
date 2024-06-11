@@ -4,6 +4,7 @@
 #include "PlayerControlsManager.h"
 #include "DrawDebugHelpers.h"
 
+
 // Sets default values for this component's properties
 UPlayerControlsManager::UPlayerControlsManager()
 {
@@ -67,14 +68,31 @@ void UPlayerControlsManager::StopJump () {
 	
 }
 
+void UPlayerControlsManager::ShootStart () {
+
+	Shoot();
+
+	float Rate = 60.f / GM->PlayerManager->GetEquippedGunData().FireRate; // per minute to second difference
+
+	// Rate is not rate, but timediff between two consecutive calls
+	GM->World->GetTimerManager().SetTimer(ShootingTimerHandle, this, &UPlayerControlsManager::Shoot, Rate, true, 0.f);
+
+}
+
+
+void UPlayerControlsManager::ShootEnd () {
+
+	GM->World->GetTimerManager().ClearTimer(ShootingTimerHandle);
+
+} 
 
 
 void UPlayerControlsManager::Shoot () {
 
 	FHitResult Hit;
-	FVector Forward = GM->Player->GetControlRotation().Vector();
+	FVector Forward = GM->PlayerCamera->GetComponentTransform().GetRotation().GetAxisX();
 	
-	FVector TraceStart = GM->Player->GetActorLocation() + (FVector::UpVector * HandsHeight) + (Forward * GunMuzzleDistance);
+	FVector TraceStart = GM->PlayerCamera->GetComponentLocation() + (GunMuzzleDistance * Forward);
 	FVector TraceEnd = TraceStart + (Forward * BulletRange);
 
 	FCollisionQueryParams QueryParams;
@@ -82,20 +100,38 @@ void UPlayerControlsManager::Shoot () {
 
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Pawn, QueryParams);
 
-	DrawDebugLine(GM->World, TraceStart, TraceEnd, FColor::Blue, false, 5.0f, 0, 10.0f);
+	DrawDebugLine(GM->World, TraceStart, TraceEnd, FColor::Yellow, false, 5.0f, 0, 5.0f);
 
 	AActor* Actor = Hit.GetActor();
 
 	if (Hit.bBlockingHit && IsValid(Actor)) {
 		if (Actor->ActorHasTag(FName(TEXT("Enemy")))) {
 
-			FName EquippedGun = GM->Player->FindComponentByClass<UPlayerManager>()->EquippedGun;
-
-			int DamageAmount = GM->GunDataAsset->Guns[EquippedGun].Damage;
+			int DamageAmount = GM->PlayerManager->GetEquippedGunData().Damage;
 			
 			Actor->FindComponentByClass<UEnemyManager>()->ApplyDamage(DamageAmount);
 
 			UE_LOG(LogTemp, Warning, TEXT("Enemy Health: %d"), Actor->FindComponentByClass<UEnemyManager>()->GetHealth());
 		}
 	}
+
+	PlayBulletSound();
+
+	float VRecoil = GM->PlayerManager->GetEquippedGunData().VerticalRecoil;
+	float HRecoil = GM->PlayerManager->GetEquippedGunData().HorizontalRecoil;
+	
+	GM->Player->AddControllerYawInput(FMath::RandRange(-HRecoil, HRecoil));
+	GM->Player->AddControllerPitchInput(-VRecoil);
+
+
 }
+
+
+
+void UPlayerControlsManager::PlayBulletSound() {
+	
+	UGameplayStatics::PlaySound2D(GM->World, GM->PlayerManager->GetEquippedGunData().BulletSound);
+
+}
+
+
